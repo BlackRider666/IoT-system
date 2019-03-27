@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Device;
 
 class DeviceController extends Controller
 {
@@ -34,7 +35,25 @@ class DeviceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try{
+            $this->validate($request,[
+                'serial'            =>  'required|integer',
+                'type_device_id'    =>  'required|integer'
+            ]);
+            $device = Device::create([
+                'serial'            =>  $request->get('serial'),
+                'type_device_id'    =>  $request->get('type_device_id'),
+                'lat'               =>  $request->get('lat'),
+                'lng'               =>  $request->get('lng')
+                ]);
+            return redirect()->json(['device'=>$device]);
+            app('db')->commit();
+        } catch (\Exception $e) {
+
+            app('db')->rollback();
+
+            return response()->json([], 403);
+        }
     }
 
     /**
@@ -68,7 +87,21 @@ class DeviceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try{
+            $this->validate($request,[
+                'serial'            =>  'required|integer',
+                'type_device_id'    =>  'required|integer'
+            ]);
+            $input = $request->all();
+            $device = Device::find($id)->update($input);
+            return redirect()->json(['device'=>$device]);
+            app('db')->commit();
+        } catch (\Exception $e) {
+
+            app('db')->rollback();
+
+            return response()->json([], 403);
+        }
     }
 
     /**
