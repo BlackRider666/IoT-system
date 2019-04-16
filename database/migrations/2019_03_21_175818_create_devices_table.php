@@ -16,13 +16,12 @@ class CreateDevicesTable extends Migration
         Schema::create('devices', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('serial');
-            $table->bigInteger('type_device_id')->unsigned()->nullable();
+            $table->string('password');
+            $table->string('wifi');
+            $table->string('ip');
             $table->float('lat',8,6);
             $table->float('lng',8,6);
             $table->timestamps();
-        });
-        Schema::table('devices', function (Blueprint $table) {
-            $table->foreign('type_device_id')->references('id')->on('type_devices')->onDelete('cascade');
         });
     }
 
@@ -34,8 +33,5 @@ class CreateDevicesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('devices');
-        Schema::table('devices', function (Blueprint $table) {
-            $table->dropForeign('devices_type_device_id_foreign');
-        });
     }
 }

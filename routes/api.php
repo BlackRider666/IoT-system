@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->post('/device/store','DeviceController@store');
+Route::middleware('auth:api')->post('/device/update/{id}','DeviceController@update');
+Route::middleware('auth:api')->get('/device/','DeviceController@index');

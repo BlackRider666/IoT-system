@@ -14,7 +14,16 @@ class DeviceController extends Controller
      */
     public function index()
     {
-        //
+        try{
+            $devices = Device::all();
+            return redirect()->json(['device'=>$device]);
+            app('db')->commit();
+        } catch (\Exception $e) {
+
+            app('db')->rollback();
+
+            return response()->json([], 403);
+        }
     }
 
     /**
